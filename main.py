@@ -10,7 +10,7 @@ def get_db_connection():
     return psycopg.connect(
         host=os.getenv("DB_HOST", "localhost"),
         port=os.getenv("DB_PORT", "5432"),
-        database=os.getenv("DB_NAME", "mydatabase"),
+        dbname=os.getenv("DB_NAME", "mydatabase"),
         user=os.getenv("DB_USER", "myuser"),
         password=os.getenv("DB_PASSWORD", "mypassword"),
     )
