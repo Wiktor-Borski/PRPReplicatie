@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: mydatabase
     ports:
       - "5432:5432"
+    volumes:
+      - target_postgres_data:/var/lib/postgresql
 
   receiver:
     build:
@@ -23,3 +25,6 @@ services:
       TARGET_DB_NAME: mydatabase
       TARGET_DB_USER: myuser
       TARGET_DB_PASSWORD: mypassword
+
+volumes:
+  target_postgres_data:
