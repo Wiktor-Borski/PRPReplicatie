@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:18-4
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+
+  sender:
+    build:
+      context: .
+      dockerfile: main.DOCKERFILE
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: mydatabase
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+    ports:
+      - "5000:5000"
+    command: ["python", "main.py"]

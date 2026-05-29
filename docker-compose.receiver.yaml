@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:18-4
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+
+  receiver:
+    build:
+      context: .
+      dockerfile: receiver.DOCKERFILE
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      SOURCE_URL: http://YOUR_MAIN_MACHINE_IP:5000/replicate
+      TARGET_DB_HOST: postgres
+      TARGET_DB_PORT: "5432"
+      TARGET_DB_NAME: mydatabase
+      TARGET_DB_USER: myuser
+      TARGET_DB_PASSWORD: mypassword
