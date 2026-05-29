@@ -25,7 +25,7 @@ services:
       PGPASSWORD: mypassword
     volumes:
       - ./init-db.sh:/init-db.sh:ro
-      - ./init.sql:/init.sql:ro
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     entrypoint: ["sh", "/init-db.sh"]
     restart: "no"
 
