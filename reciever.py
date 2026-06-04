@@ -5,7 +5,7 @@ from urllib import error, request
 import psycopg
 
 
-SOURCE_URL = os.getenv("SOURCE_URL", "http://sender:5000/replicate")
+SOURCE_URL = os.getenv("SOURCE_URL", "http://192.168.122.18:5000/replicate")
 TARGET_DB_HOST = os.getenv("TARGET_DB_HOST", "target-postgres")
 TARGET_DB_PORT = os.getenv("TARGET_DB_PORT", "5432")
 TARGET_DB_NAME = os.getenv("TARGET_DB_NAME", "mydatabase")
