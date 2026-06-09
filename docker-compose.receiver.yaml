@@ -3,9 +3,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
@@ -21,10 +21,10 @@ services:
     environment:
       SOURCE_URL: http://192.168.122.18:5000/replicate
       TARGET_DB_HOST: postgres
-      TARGET_DB_PORT: "5432"
-      TARGET_DB_NAME: mydatabase
-      TARGET_DB_USER: myuser
-      TARGET_DB_PASSWORD: mypassword
+      TARGET_DB_PORT: ${DB_PORT}
+      TARGET_DB_NAME: ${DB_NAME}
+      TARGET_DB_USER: ${DB_USER}
+      TARGET_DB_PASSWORD: ${DB_PASSWORD}
 
 volumes:
   target_postgres_data:

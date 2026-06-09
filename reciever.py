@@ -6,11 +6,11 @@ import psycopg
 
 
 SOURCE_URL = os.getenv("SOURCE_URL", "http://192.168.122.18:5000/replicate")
-TARGET_DB_HOST = os.getenv("TARGET_DB_HOST", "target-postgres")
-TARGET_DB_PORT = os.getenv("TARGET_DB_PORT", "5432")
-TARGET_DB_NAME = os.getenv("TARGET_DB_NAME", "mydatabase")
-TARGET_DB_USER = os.getenv("TARGET_DB_USER", "myuser")
-TARGET_DB_PASSWORD = os.getenv("TARGET_DB_PASSWORD", "mypassword")
+TARGET_DB_HOST = os.getenv("TARGET_DB_HOST")
+TARGET_DB_PORT = os.getenv("TARGET_DB_PORT")
+TARGET_DB_NAME = os.getenv("TARGET_DB_NAME")
+TARGET_DB_USER = os.getenv("TARGET_DB_USER")
+TARGET_DB_PASSWORD = os.getenv("TARGET_DB_PASSWORD")
 
 
 def fetch_sql_statements():
