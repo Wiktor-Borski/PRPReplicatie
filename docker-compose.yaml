@@ -15,8 +15,6 @@ services:
       interval: 2s
       timeout: 5s
       retries: 30
-    networks:
-      - internal
 
   init-db:
     image: postgres:latest
@@ -30,8 +28,6 @@ services:
       - ./init.sql:/seed.sql:ro
     entrypoint: ["sh", "/init-db.sh"]
     restart: "no"
-    networks:
-      - internal
 
   sender:
     build:
@@ -47,16 +43,16 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      API_KEY: ${API_KEY}
     ports:
       - "5000:5000"
     command: ["python", "main.py"]
-    networks:
-      - internal
 
   nginx:
     image: nginx:alpine
     restart: always
     ports:
+      - "80:80"
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
@@ -65,13 +61,8 @@ services:
 
     depends_on:
       sender:
-        condition: service_healthy
-    networks:
-      - internal
+        condition: service_started
 
 volumes:
   source_postgres_data:
 
-networks:
-  internal:
-    name: internal 

@@ -5,6 +5,7 @@ WORKDIR /app
 COPY main.py /app/main.py
 
 RUN pip install --no-cache-dir flask psycopg[binary]
+RUN pip install --no-cache-dir python-dotenv
 
 EXPOSE 5000
 

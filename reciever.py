@@ -4,8 +4,9 @@ from urllib import error, request
 
 import psycopg
 
+API_KEY = os.getenv("API_KEY")
 
-SOURCE_URL = os.getenv("SOURCE_URL", "http://192.168.122.18:5000/replicate")
+SOURCE_URL = f"https://192.168.122.18/replicate?X-API-Key={API_KEY}"
 TARGET_DB_HOST = os.getenv("TARGET_DB_HOST")
 TARGET_DB_PORT = os.getenv("TARGET_DB_PORT")
 TARGET_DB_NAME = os.getenv("TARGET_DB_NAME")

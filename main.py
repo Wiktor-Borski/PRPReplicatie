@@ -1,10 +1,20 @@
 import os
 import psycopg
 from psycopg import sql
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+API_KEY = os.getenv("API_KEY")
+
+def require_api_key():
+    provided = (request.headers.get("X-API-Key") or "").strip()
+    expected = (API_KEY or "").strip()
+
+    if provided != expected:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    return None
 
 def get_db_connection():
     return psycopg.connect(
@@ -17,6 +27,9 @@ def get_db_connection():
 
 @app.route('/replicate', methods=['GET'])
 def replicate_data():
+    auth = require_api_key()
+    if auth:
+        return auth
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
