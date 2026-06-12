@@ -3,32 +3,40 @@ import os
 from urllib import error, request
 
 import psycopg
+import ssl
 
 API_KEY = os.getenv("API_KEY")
 
-SOURCE_URL = f"https://192.168.122.18/replicate?X-API-Key={API_KEY}"
+SOURCE_URL = f"https://192.168.122.18/replicate"
 TARGET_DB_HOST = os.getenv("TARGET_DB_HOST")
 TARGET_DB_PORT = os.getenv("TARGET_DB_PORT")
 TARGET_DB_NAME = os.getenv("TARGET_DB_NAME")
 TARGET_DB_USER = os.getenv("TARGET_DB_USER")
 TARGET_DB_PASSWORD = os.getenv("TARGET_DB_PASSWORD")
 
-
 def fetch_sql_statements():
-	http_request = request.Request(
-		SOURCE_URL,
-		headers={"Content-Type": "application/json"},
-	)
+    http_request = request.Request(
+        SOURCE_URL,
+        headers={
+            "X-API-Key": API_KEY,
+            "Content-Type": "application/json",
+        },
+    )
 
-	with request.urlopen(http_request, timeout=60) as response:
-		data = json.loads(response.read().decode("utf-8"))
+    ssl_context = ssl._create_unverified_context()
 
-	statements = data.get("sql", [])
-	if not isinstance(statements, list):
-		raise ValueError("Expected 'sql' to be a list of SQL statements")
+    with request.urlopen(
+        http_request,
+        timeout=60,
+        context=ssl_context,
+    ) as response:
+        data = json.loads(response.read().decode("utf-8"))
 
-	return statements
+    statements = data.get("sql", [])
+    if not isinstance(statements, list):
+        raise ValueError("Expected 'sql' to be a list of SQL statements")
 
+    return statements
 
 def apply_sql_statements(statements):
 	with psycopg.connect(
