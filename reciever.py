@@ -7,7 +7,7 @@ import ssl
 
 API_KEY = os.getenv("API_KEY")
 
-SOURCE_URL = f"https://192.168.122.18/replicate"
+SOURCE_URL = "https://192.168.122.18/replicate"
 TARGET_DB_HOST = os.getenv("TARGET_DB_HOST")
 TARGET_DB_PORT = os.getenv("TARGET_DB_PORT")
 TARGET_DB_NAME = os.getenv("TARGET_DB_NAME")
