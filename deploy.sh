@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Installing dependencies..."
+echo "Installing infrastructure dependencies..."
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y ca-certificates curl gnupg
