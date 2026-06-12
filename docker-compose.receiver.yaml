@@ -2,20 +2,32 @@ services:
   postgres:
     image: postgres:latest
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1028M
+          cpus: "1.0"
+        reservations:
+          memory: 256M
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-    ports:
-      - "5432:5432"
     volumes:
       - target_postgres_data:/var/lib/postgresql
+    networks:
+      - db
 
   receiver:
     build:
       context: .
       dockerfile: receiver.DOCKERFILE
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.1"
     depends_on:
       - postgres
     environment:
@@ -25,6 +37,13 @@ services:
       TARGET_DB_USER: ${DB_USER}
       TARGET_DB_PASSWORD: ${DB_PASSWORD}
       API_KEY: ${API_KEY}
+    networks:
+      - db
+      - backend
 
 volumes:
   target_postgres_data:
+
+networks:
+  db:
+  backend:
