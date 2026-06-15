@@ -15,6 +15,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - target_postgres_data:/var/lib/postgresql
+      - ./logs/postgres:/var/log/postgresql:rw
     networks:
       - db
 
@@ -37,6 +38,8 @@ services:
       TARGET_DB_USER: ${DB_USER}
       TARGET_DB_PASSWORD: ${DB_PASSWORD}
       API_KEY: ${API_KEY}
+    volumes:
+      - ./logs/receiver:/app/logs:rw
     networks:
       - db
       - backend

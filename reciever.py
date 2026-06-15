@@ -5,6 +5,9 @@ from urllib import error, request
 import psycopg
 import ssl
 
+import logging
+import sys
+
 API_KEY = os.getenv("API_KEY")
 
 SOURCE_URL = "https://192.168.122.18/replicate"
@@ -13,6 +16,12 @@ TARGET_DB_PORT = os.getenv("TARGET_DB_PORT")
 TARGET_DB_NAME = os.getenv("TARGET_DB_NAME")
 TARGET_DB_USER = os.getenv("TARGET_DB_USER")
 TARGET_DB_PASSWORD = os.getenv("TARGET_DB_PASSWORD")
+
+logging.basicConfig(
+    filename="/app/logs/sender.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 def fetch_sql_statements():
     http_request = request.Request(

@@ -25,6 +25,7 @@ services:
 
   init-db:
     image: postgres:18.4-trixie
+    restart: "no"
     deploy:
       resources:
         limits:
@@ -39,7 +40,6 @@ services:
       - ./init-db.sh:/init-db.sh:ro
       - ./init.sql:/seed.sql:ro
     entrypoint: ["sh", "/init-db.sh"]
-    restart: "no"
     networks:
       - db
 
@@ -68,9 +68,37 @@ services:
     expose:
       - "5000"
     command: ["python", "main.py"]
+    volumes:
+      - ./logs/sender:/app/logs:rw
     networks:
       - frontend
       - backend
+      - db
+  watchdog:
+    build:
+      context: .
+      dockerfile: watchdog.DOCKERFILE
+    restart: always
+    depends_on:
+      sender:
+        condition: service_started
+      postgres:
+        condition: service_started
+    environment:
+      SENDER_URL: http://sender:5000/replicate
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      EMAIL_RECEIVER: ${EMAIL_RECEIVER}
+    networks:
+      - backend
+      - db
+    volumes:
+      - ./logs/watchdog:/app/logs
 
   nginx:
     image: nginx:alpine

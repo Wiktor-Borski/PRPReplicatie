@@ -2,10 +2,18 @@ import os
 import psycopg
 from psycopg import sql
 from flask import Flask, jsonify, request
+import logging
+import sys
 
 app = Flask(__name__)
 
 API_KEY = os.getenv("API_KEY")
+
+logging.basicConfig(
+    filename="/app/logs/sender.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 def require_api_key():
     provided = (request.headers.get("X-API-Key") or "").strip()
